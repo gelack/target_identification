@@ -1,0 +1,5 @@
+[emzed_package]
+extension = target_identification
+main = target_identification.app:run
+package = target_identification
+
