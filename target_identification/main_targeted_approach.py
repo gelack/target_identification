@@ -25,7 +25,7 @@ def run_workflow(__):
     .addFloat('Min area for peak filtering', default=1e3, help='Minimal area to define adduct peak as existing')\
     .addFloat("MZ tolerance in ppm", default=5.0, help="relative MZ tolerance for targeted identification")\
     .addDirectory('Please choose result directory')\
-    .addText('Give results title')\
+    .addString('Give results title')\
     .show()
     compound_file_path, peakmap_pathes, min_area, mz_tol_ppm, result_path, result_title = params
     mz_tol = mz_tol_ppm*1e-6    
@@ -39,14 +39,15 @@ def run_workflow(__):
 def reload_and_inspect(__):
     result_path=emzed.gui.askForSingleFile(extensions=['table'])
     results = io.load_result(result_path)
-    batch_process.inspect_and_modify(results)
-    path, title = os.path.split(result_path)
-    io.main_save(result, path,title)
+    results = batch_process.inspect_and_modify(results)
+    path, file_name = os.path.split(result_path)
+    table_name = batch_process.get_table_name(file_name)
+    io.main_save(results, path,table_name)
     
        
 def main_workflow():
     emzed.gui.DialogBuilder('Please select a task...   ')\
-    .addButton('Run targeted identification',run_workflow)\
+    .addButton('Run targeted approach',run_workflow)\
     .addButton('Reload, inspect and modify', reload_and_inspect)\
     .show()
  
